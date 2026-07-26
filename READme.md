@@ -34,6 +34,23 @@ The analysis follows an end-to-end Data Engineering and Analytics workflow:
        ▼
 [Interactive Excel Dashboard] (DAX/Pivot Analysis & Visuals)
 ```
+```
+DAX
+SUMX(
+    FILTER(
+        vw_fact_employee_attrition, 
+       vw_fact_employee_attrition[attrition] = TRUE()
+    ),
+   vw_fact_employee_attrition[monthly_income] * 
+    SWITCH(
+        vw_fact_employee_attrition[job_role],
+        "Therapist", 15.0,
+        "Nurse", 12.0,
+        "Admin", 4.5,
+        6.0 -- Default for "Others"
+    )
+)
+```
 - Extraction & Staging: Downloaded healthcare HR data from Kaggle and imported it into a local PostgreSQL database using a staging table with standard TEXT datatypes.
 - Data Modeling (ETL): Created a star schema consisting of a Fact Table and an Employees Dimension Table (dim_employees). Defined primary/foreign key relationships and removed redundant columns to maintain normalization principles.
 - Feature Engineering & SQL Views: Constructed an analytical SQL VIEW featuring custom data buckets (e.g., Distance From Home, Years Since Last Promotion, and Years in Current Role) to streamline analysis.
